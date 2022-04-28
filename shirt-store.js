@@ -5,31 +5,42 @@ export const cost = (shirts) => {
 
   let counter = 0;
   let grandTotal = 0;
+  
 
   //sort the array from asc to desc
   shirts = shirts.sort();
-  const uniqueItemsArr = new Set(shirts);
+  const uniqueItemsArr = Array.from(new Set(shirts));
 
-  while(JSON.stringify(uniqueItemsArr)==JSON.stringify(shirts)){
-    console.log("#####")
-    console.log(shirts)
-    for(let i = 0; i < shirts.length-1; i++){
-      if(shirts[i] !== shirts[i+1]){
-        counter += 1;
-        //remove last occurence of repeat item in array
-        shirts.splice(i, 1);
-        console.log(shirts)
+  let flag = true;
+  while (flag) {
+    console.log("#####");
+    console.log(shirts);
+    for (let i = 0; i < shirts.length; i++) {
+      if (JSON.stringify(uniqueItemsArr) !== JSON.stringify(shirts)) {
+        if (shirts[i] !== shirts[i + 1] && shirts[i] == shirts[i - 1]) {
+          counter += 1;
+          //remove last occurence of repeat item in array
+          shirts.splice(i, 1);
+          console.log(shirts);
+        }
+      } else {
+        console.log("&&&&&&");
+        console.log("Match found");
+        flag = false;
+        break;
       }
     }
-
-    grandTotal += ((counter * 800) - ((counter * 800) * discounter(counter)))
+    console.log("$$$$$");
+    console.log(shirts);
+    console.log(counter);
+      grandTotal += counter * 800 - counter * 800 * discounter(counter);
     counter = 0
-
+    if (flag == false) {
+      break;
+    }
   }
-
-  //remaining items in arr will not be duplicates
-  let theRemainingDiscount = ((new Set(shirts).size * 800) - ((new Set(shirts).size * 800) * discounter(shirts.length)));
+  let theRemainingDiscount = new Set(shirts).size * 800 -
+  (new Set(shirts).size * 800 * discounter(new Set(shirts).size));
   
-
   return theRemainingDiscount + grandTotal;
 };
